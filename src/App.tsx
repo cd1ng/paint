@@ -1,7 +1,12 @@
 import Reacr, { useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import { decrement, increment } from './store/counterSlice'
+
+import Edit from './pages/edit'
+import List from './pages/list'
+import Login from './pages/login'
 
 function App() {
   const count = useAppSelector((state) => state.counter.value)
@@ -16,27 +21,13 @@ function App() {
   }
 
   return (
-    <>
-      <button
-        className='
-      py-2
-      px-4
-      font-semibold
-      rounded-lg
-      shadow-md
-      text-white
-      bg-green-500
-      hover:bg-green-700
-      border-none
-      cursor-pointer
-    '>
-        Click me
-      </button>
-
-      <button onClick={handleIncrementClick}>+</button>
-      <div>{count}</div>
-      <button onClick={handleDecrementClick}>-</button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<List />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/edit' element={<Edit />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
