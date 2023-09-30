@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import counterSlice from './counterSlice'
+import paintSlice from './paintSlice'
 
 export const store = configureStore({
   reducer: {
     counter: counterSlice,
+    paint: paintSlice,
     // comments: commentsReducer,
     // users: usersReducer,
   },
