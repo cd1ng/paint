@@ -1,13 +1,20 @@
 import React, { FC, useEffect, useRef } from 'react'
 
-import Styled from './Styled'
 import { useAppDispatch, useAppSelector } from 'src/store/hooks'
-import { addComponent } from 'src/store/paintSlice'
+import { addComponent, setCurChoose } from 'src/store/paintSlice'
+
+import Zoom from './Zoom'
+
+import classnames from 'classnames'
+
+import Styled from './Styled'
 
 const Painter: FC = () => {
   const canvasPosition = useRef({ left: 0, top: 0 })
   const paintRef = useRef<HTMLDivElement>(null)
   const totalComponents = useAppSelector((state) => state.paint.components)
+  const curZoom = useAppSelector((state) => state.paint.zoom)
+  const curIndex = useAppSelector((state) => state.paint.curIndex)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -23,8 +30,8 @@ const Painter: FC = () => {
 
     if (receiveData) {
       receiveData.style.position = 'absolute'
-      receiveData.style.left = actualX
-      receiveData.style.top = actualY
+      receiveData.style.left = actualX / curZoom
+      receiveData.style.top = actualY / curZoom
     }
     console.log(receiveData)
     dispatch(addComponent(receiveData))
@@ -37,11 +44,15 @@ const Painter: FC = () => {
 
   return (
     <Styled ref={paintRef} onDragOver={handleDragOver} onDrop={handleDrop}>
-      {totalComponents.map((item, index) => (
-        <div key={index} style={item.style}>
-          {item.content}
-        </div>
-      ))}
+      <Zoom />
+      {totalComponents.map((item, index) => {
+        const classes = classnames('component-border', { select: curIndex === index })
+        return (
+          <div key={index} style={item.style} className={classes} onClick={() => dispatch(setCurChoose(index))}>
+            {item.content}
+          </div>
+        )
+      })}
     </Styled>
   )
 }

@@ -1,6 +1,10 @@
 import { FC } from 'react'
+import { Button } from 'antd'
+
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 
 import Styled from './Styled'
+import { clearComponents } from 'src/store/paintSlice'
 
 const normalStyle = {
   content: '默认文本',
@@ -19,8 +23,13 @@ const normalStyle = {
 }
 
 const LeftAside: FC = () => {
+  const dispatch = useAppDispatch()
+
   const handleDrag = (e: DragEvent) => {
     e.dataTransfer.setData('value', JSON.stringify(normalStyle))
+  }
+  const handleClearCmp = () => {
+    dispatch(clearComponents())
   }
 
   return (
@@ -32,6 +41,9 @@ const LeftAside: FC = () => {
         <div className='item' id='item2' draggable='true' onDragStart={handleDrag}>
           图片
         </div>
+        <Button type='primary' onClick={handleClearCmp}>
+          清空
+        </Button>
       </div>
     </Styled>
   )
